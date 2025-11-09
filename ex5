@@ -1,0 +1,91 @@
+using System;
+using System.Collections.Generic;
+interface IDepositWithdraw
+{
+    void Deposit(double amount);
+    void Withdraw(double amount);
+}
+
+interface ITransfer
+{
+    void Transfer(BankAccount toAccount, double amount);
+}
+
+class BankAccount : IDepositWithdraw, ITransfer
+{
+    private double balance;
+
+    public BankAccount(double initialBalance)
+    {
+        balance = initialBalance;
+    }
+
+    public void Deposit(double amount)
+    {
+        if (amount > 0)
+        {
+            balance += amount;
+            Console.WriteLine($"Deposited {amount}. New balance: {balance}");
+        }
+        else
+        {
+            Console.WriteLine("Deposit amount must be positive.");
+        }
+    }
+
+    public void Withdraw(double amount)
+    {
+        if (amount > 0 && balance >= amount)
+        {
+            balance -= amount;
+            Console.WriteLine($"Withdrew {amount}. New balance: {balance}");
+        }
+        else if (amount <= 0)
+        {
+            Console.WriteLine("Withdrawal amount must be positive.");
+        }
+        else
+        {
+            Console.WriteLine("Insufficient funds.");
+        }
+    }
+
+    public void Transfer(BankAccount toAccount, double amount)
+    {
+        if (amount > 0 && balance >= amount)
+        {
+            Withdraw(amount);
+            toAccount.Deposit(amount);
+            Console.WriteLine($"Transferred {amount} to another account.");
+        }
+        else
+        {
+            Console.WriteLine("Transfer failed: Invalid amount or insufficient funds.");
+        }
+    }
+
+    public double GetBalance()
+    {
+        return balance;
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        BankAccount account1 = new BankAccount(1000.0); 
+        BankAccount account2 = new BankAccount(500.0);
+
+        Console.WriteLine("Initial balances:");
+        Console.WriteLine($"Account 1: {account1.GetBalance()}");
+        Console.WriteLine($"Account 2: {account2.GetBalance()}");
+
+        Console.WriteLine("\nTransferring 200 from Account 1 to Account 2:");
+        account1.Transfer(account2, 200.0);
+
+        Console.WriteLine("\nFinal balances:");
+        Console.WriteLine($"Account 1: {account1.GetBalance()}");
+        Console.WriteLine($"Account 2: {account2.GetBalance()}");
+    }
+}
