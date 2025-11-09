@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+interface IPricable
+{
+    double GetPrice();
+}
+interface IWarrantable
+{
+    int GetWarrantyMonths();
+}
+class Phone : IPricable, IWarrantable
+{
+    private double price;
+    private int warrantyMonths;
+
+    public Phone(double price, int warrantyMonths)
+    {
+        this.price = price;
+        this.warrantyMonths = warrantyMonths;
+    }
+
+    public double GetPrice()
+    {
+        return price;
+    }
+
+    public int GetWarrantyMonths()
+    {
+        return warrantyMonths;
+    }
+}
+class Laptop : IPricable
+{
+    private double price;
+
+    public Laptop(double price)
+    {
+        this.price = price;
+    }
+
+    public double GetPrice()
+    {
+        return price;
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Phone phone = new Phone(500.0, 24); 
+        Laptop laptop = new Laptop(1200.0);
+        List<IPricable> items = new List<IPricable> { phone, laptop };
+
+        double totalCost = 0.0;
+        foreach (var item in items)
+        {
+            totalCost += item.GetPrice();
+            if (item is IWarrantable warrantableItem)
+            {
+                Console.WriteLine($"Warranty for {item.GetType().Name}: {warrantableItem.GetWarrantyMonths()} months");
+            }
+        }
+        Console.WriteLine($"Total cost: {totalCost}");
+    }
+}
+
