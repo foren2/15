@@ -1,0 +1,86 @@
+using System;
+using System.Collections.Generic;
+interface ISwitchable
+{
+    void TurnOn();
+    void TurnOff();
+}
+interface ILevelable
+{
+    void SetLevel(int level);
+}
+class Lamp : ISwitchable, ILevelable
+{
+    private bool isOn;
+    private int level;
+
+    public Lamp()
+    {
+        isOn = false;
+        level = 0;
+    }
+
+    public void TurnOn()
+    {
+        isOn = true;
+        level = 100;
+        Console.WriteLine("Lamp is on at level 100");
+    }
+
+    public void TurnOff()
+    {
+        isOn = false;
+        level = 0;
+        Console.WriteLine("Lamp is off");
+    }
+
+    public void SetLevel(int level)
+    {
+        if (level >= 0 && level <= 100)
+        {
+            this.level = level;
+            Console.WriteLine($"Lamp level set to {this.level}");
+        }
+        else
+        {
+            Console.WriteLine("Invalid level. Must be between 0 and 100.");
+        }
+    }
+    public void PrintState()
+    {
+        Console.WriteLine($"Lamp state: {(isOn ? "On" : "Off")}, Level: {level}");
+    }
+}
+
+class Fan : ISwitchable
+{
+    public void TurnOn()
+    {
+        Console.WriteLine("Fan is on");
+    }
+
+    public void TurnOff()
+    {
+        Console.WriteLine("Fan is off");
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Lamp lamp = new Lamp();
+        Fan fan = new Fan();
+        List<ISwitchable> devices = new List<ISwitchable> { lamp, fan };
+        foreach (var device in devices)
+        {
+            device.TurnOn();
+            device.TurnOff();
+        }
+        if (lamp is ILevelable levelableLamp)
+        {
+            levelableLamp.SetLevel(30);
+        }
+        lamp.PrintState();
+    }
+}
