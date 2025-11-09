@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+
+interface IAttackable
+{
+    void Attack();
+}
+interface IHealable
+{
+    void Heal();
+}
+class Warrior : IAttackable
+{
+    public void Attack()
+    {
+        Console.WriteLine("Warrior attacks!");
+    }
+}
+class Mage : IAttackable, IHealable
+{
+    public void Attack()
+    {
+        Console.WriteLine("Mage casts a spell!");
+    }
+
+    public void Heal()
+    {
+        Console.WriteLine("Mage heals an ally!");
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Warrior warrior = new Warrior();
+        Mage mage = new Mage();
+        List<object> players = new List<object> { warrior, mage };
+        Console.WriteLine("All attackers:");
+        foreach (var player in players)
+        {
+            if (player is IAttackable attacker)
+            {
+                attacker.Attack();
+            }
+        }
+        Console.WriteLine("\nAll healers:");
+        foreach (var player in players)
+        {
+            if (player is IHealable healer)
+            {
+                healer.Heal();
+            }
+        }
+    }
+}
